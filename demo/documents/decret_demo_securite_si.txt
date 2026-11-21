@@ -1,0 +1,31 @@
+Décret fictif n° 2099-45 relatif à la sécurité des systèmes d'information (DOCUMENT DE DÉMONSTRATION)
+
+CHAPITRE I – GOUVERNANCE
+
+Article premier
+Le présent décret s'applique aux entreprises et organismes publics qui exploitent des systèmes d'information essentiels à la continuité de leurs services.
+
+Article 2
+Chaque organisme désigne un responsable de la sécurité des systèmes d'information (RSSI) et tient à jour l'inventaire de ses actifs informatiques critiques.
+
+CHAPITRE II – MESURES TECHNIQUES
+
+Article 3
+L'accès aux systèmes critiques est protégé par une authentification multifacteur. Les mots de passe comportent au moins 12 caractères et sont renouvelés au minimum tous les 12 mois.
+
+Article 4
+Les données critiques font l'objet de sauvegardes quotidiennes. Une copie des sauvegardes est conservée hors site, et un test de restauration est réalisé au moins une fois par semestre.
+
+Article 5
+Les journaux d'événements de sécurité sont conservés pendant 12 mois et protégés contre toute modification non autorisée.
+
+CHAPITRE III – INCIDENTS ET AUDITS
+
+Article 6
+Tout incident de sécurité majeur est déclaré à l'agence nationale de cybersécurité dans un délai de 24 heures à compter de sa détection. Un rapport détaillé est transmis dans un délai de 15 jours.
+
+Article 7
+Un audit de sécurité est réalisé chaque année par un organisme indépendant agréé. Les non-conformités relevées sont corrigées dans un délai de 90 jours.
+
+Article 8
+Le personnel ayant accès aux systèmes critiques suit une formation de sensibilisation à la cybersécurité au moins une fois par an.

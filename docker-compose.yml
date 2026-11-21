@@ -1,0 +1,21 @@
+services:
+  api:
+    build: .
+    env_file: .env
+    environment:
+      - OLLAMA_URL=http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports: ["8000:8000"]
+    volumes:
+      - ./data:/app/data          # documents + index persistants
+      - hf_cache:/models          # cache des modèles d'embedding
+  ui:
+    build: .
+    command: streamlit run app/ui/streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    environment:
+      - API_URL=http://api:8000
+    ports: ["8501:8501"]
+    depends_on: [api]
+volumes:
+  hf_cache:
