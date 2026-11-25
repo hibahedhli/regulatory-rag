@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
 
-SUPPORTED = {".pdf", ".txt", ".md", ".html", ".htm"}
+SUPPORTED = {".pdf", ".docx", ".txt", ".md", ".html", ".htm"}
 
 
 @dataclass
@@ -70,6 +70,30 @@ def _load_pdf(path: Path) -> RawDocument:
     return RawDocument(slugify(path.stem), title, path.name, pages)
 
 
+def _load_docx(path: Path) -> RawDocument:
+    """Lit un .docx : paragraphes et tableaux dans l'ordre du document (pas de numéro de page fiable)."""
+    from docx import Document
+    from docx.table import Table
+    from docx.text.paragraph import Paragraph
+
+    doc = Document(str(path))
+    lines: list[str] = []
+    for child in doc.element.body.iterchildren():
+        if child.tag.endswith("}p"):
+            lines.append(Paragraph(child, doc).text)
+        elif child.tag.endswith("}tbl"):
+            for row in Table(child, doc).rows:
+                cells, seen = [], set()
+                for cell in row.cells:  # les cellules fusionnées apparaissent plusieurs fois
+                    if id(cell._tc) not in seen:
+                        seen.add(id(cell._tc))
+                        cells.append(cell.text.strip())
+                lines.append(" | ".join(c for c in cells if c))
+    text = "\n".join(lines)
+    meta_title = (doc.core_properties.title or "").strip()
+    return RawDocument(slugify(path.stem), meta_title or _first_line(text, path.stem), path.name, [(None, text)])
+
+
 def _load_text(path: Path) -> RawDocument:
     text = path.read_text(encoding="utf-8", errors="ignore")
     if path.suffix.lower() in {".html", ".htm"}:
@@ -86,7 +110,8 @@ def load_documents(raw_dir: Path) -> list[RawDocument]:
         if not path.is_file() or path.suffix.lower() not in SUPPORTED:
             continue
         try:
-            doc = _load_pdf(path) if path.suffix.lower() == ".pdf" else _load_text(path)
+            ext = path.suffix.lower()
+            doc = _load_pdf(path) if ext == ".pdf" else _load_docx(path) if ext == ".docx" else _load_text(path)
             if doc.doc_id in seen:
                 doc.doc_id = f"{doc.doc_id}-{path.suffix.lower().lstrip('.')}"
             seen.add(doc.doc_id)

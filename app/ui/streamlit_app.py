@@ -12,21 +12,21 @@ import requests
 import streamlit as st
 
 API_URL = os.getenv("API_URL", "http://localhost:8000")
-FORMATS = ["pdf", "txt", "md", "html"]
+FORMATS = ["pdf", "docx", "txt", "md", "html"]
 SUGGESTIONS = [
     "Quelles sont les obligations principales ?",
     "Quels délais sont mentionnés ?",
     "Quelles sanctions sont prévues ?",
 ]
 
-st.set_page_config(page_title="Assistant réglementaire", page_icon="✦", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Assistant réglementaire", page_icon="✦", layout="wide", initial_sidebar_state="expanded")
 
 CSS = """
 <style>
 :root{--v:#af0c0c;--vh:#8A0909;--vl:#EF5B5B;--bg:#252424;--side:#1F1E1E;--surf:#2F2D2D;--surf2:#2A2828;--bd:#403C3C;
       --ink:#F2EFEF;--muted:#A89F9F;--soft:#CFC7C7;
       --serif:'Iowan Old Style','Palatino Linotype','Book Antiqua',Georgia,serif;}
-[data-testid="stToolbar"],[data-testid="stDecoration"],#MainMenu,footer{display:none !important;}
+[data-testid="stDecoration"],#MainMenu,footer{display:none !important;}
 header[data-testid="stHeader"]{background:transparent;}
 .stApp{background:var(--bg);color:var(--ink);}
 .block-container{max-width:800px;padding-top:2.2rem;padding-bottom:9rem;}
@@ -211,7 +211,7 @@ if not messages and not prompt:
     elif not doc_error:
         st.markdown(
             '<div class="hello"><div class="mark">✦</div><h1>Commence par ajouter<br>tes documents</h1>'
-            "<p>Utilise le panneau de gauche (PDF, TXT, Markdown ou HTML), puis pose tes questions ici.</p></div>",
+            "<p>Utilise le panneau de gauche (PDF, Word, TXT, Markdown ou HTML), puis pose tes questions ici.</p></div>",
             unsafe_allow_html=True,
         )
 
