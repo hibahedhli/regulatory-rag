@@ -22,7 +22,7 @@ Questions : 32 · cas à analyser : 5 (dont 2 erreurs réelles)
 
 **Cause probable (automatique) :** Question proche du corpus : les mots et le sens correspondent à des articles existants, donc les signaux de pertinence ne peuvent pas détecter l'absence. Seul le LLM (prompt) peut refuser dans ce cas.
 
-**Ton analyse :** _à compléter (pourquoi, et quelle amélioration proposer)._
+**Analyse :** _Cas 1. La question porte sur un sujet présent dans le corpus (télétravail, amende), mais aucun article ne prévoit de sanction. La recherche ramène les articles 11 (loi) et 6 (hygiène), qui partagent seulement les mots « non-respect » et « amende ». Les trois modes acceptent la question. Le score de similarité (0,8686) est proche de celui d'une bonne réponse (0,8774 pour les sauvegardes) : aucun seuil ne sépare les deux cas. Amélioration : une étape de vérification par le LLM (« l'extrait répond-il à la question ? ») ou un reranker, en plus de la consigne de refus du prompt._
 
 ## Cas 2 : Question sans réponse acceptée à tort
 
@@ -39,7 +39,7 @@ Questions : 32 · cas à analyser : 5 (dont 2 erreurs réelles)
 
 **Cause probable (automatique) :** Question proche du corpus : les mots et le sens correspondent à des articles existants, donc les signaux de pertinence ne peuvent pas détecter l'absence. Seul le LLM (prompt) peut refuser dans ce cas.
 
-**Ton analyse :** _à compléter (pourquoi, et quelle amélioration proposer)._
+**Analyse :** _Cas 2. Le droit d'accès existe (art. 5), mais le recours de 10 jours concerne les marchés publics (circulaire, art. 6). L'article 5 contient un délai de 30 jours pour répondre à une demande d'accès : le modèle pourrait le confondre avec un délai de recours. La similarité (0,8865) dépasse celle de deux bonnes réponses (0,8774 et 0,8781). Amélioration : même vérification, et un prompt qui exige que l'extrait traite précisément de la notion demandée (recours)._
 
 ## Cas 3 : Succès fragile (à surveiller)
 
@@ -56,7 +56,7 @@ Questions : 32 · cas à analyser : 5 (dont 2 erreurs réelles)
 
 **Cause probable (automatique) :** Bon passage en 1re position, mais avec une faible marge ou un faible recouvrement lexical.
 
-**Ton analyse :** _à compléter (pourquoi, et quelle amélioration proposer)._
+**Analyse :** _Cas 3. Le bon passage est au rang 1 avec une grande marge. Le recouvrement lexical est faible (0,4) : la question dit « fréquence » et « tester la restauration », le texte dit « au moins une fois par semestre ». Seule la proximité sémantique fait gagner, et un BM25 seul échouerait avec une formulation plus éloignée. Amélioration : garder la recherche hybride, ajouter une réécriture de la requête._
 
 ## Cas 4 : Succès fragile (à surveiller)
 
@@ -73,7 +73,7 @@ Questions : 32 · cas à analyser : 5 (dont 2 erreurs réelles)
 
 **Cause probable (automatique) :** Bon passage en 1re position, mais avec une faible marge ou un faible recouvrement lexical.
 
-**Ton analyse :** _à compléter (pourquoi, et quelle amélioration proposer)._
+**Analyse :** _Cas 4. Rang 1 correct, mais marge faible (0,0328 contre 0,0291). Le deuxième passage est le délai de 48 heures du règlement d'hygiène, un autre délai de déclaration à une autorité. Risque de confusion entre 72 et 48 heures. Amélioration : reranker, ou citer le titre du texte dans la réponse._
 
 ## Cas 5 : Succès fragile (à surveiller)
 
@@ -90,4 +90,4 @@ Questions : 32 · cas à analyser : 5 (dont 2 erreurs réelles)
 
 **Cause probable (automatique) :** Bon passage en 1re position, mais avec une faible marge ou un faible recouvrement lexical.
 
-**Ton analyse :** _à compléter (pourquoi, et quelle amélioration proposer)._
+**Analyse :** _Cas 5. Marge quasi nulle (0,0328 contre 0,0323). Le deuxième passage est le recours de 10 jours, dans la même circulaire, et le mot « délai » correspond à plusieurs articles. Amélioration : reranker, ou question plus précise._
