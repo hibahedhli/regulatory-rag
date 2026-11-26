@@ -20,7 +20,7 @@ def pipe(tmp_path_factory):
     )
     p = RAGPipeline(s)
     stats = p.ingest()
-    assert stats["documents"] == 3 and stats["chunks"] >= 25
+    assert stats["documents"] == 7 and stats["chunks"] >= 40  # 7 documents : txt, md, html, docx, pdf
     return p
 
 
@@ -39,8 +39,10 @@ def test_ask_returns_sources_and_citations(pipe):
 
 def test_evaluation_quality(pipe):
     rep = evaluate(pipe, k=5, questions_path=ROOT / "demo" / "eval_questions.json")
-    assert rep["hybrid"]["recall@5"] >= 0.8
-    assert rep["bm25"]["recall@5"] >= 0.8
+    assert rep["hybrid"]["recall@5"] >= 0.9
+    assert rep["bm25"]["recall@5"] >= 0.9
+    assert rep["hybrid"]["false_refusals"] == 0  # aucune question valable ne doit être refusée
+    assert rep["hybrid"]["off_topic_refused"] == "7/7"
 
 
 def test_documents_list_and_empty_corpus(tmp_path):

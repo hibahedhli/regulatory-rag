@@ -1,14 +1,157 @@
 [
-  {"question": "Dans quel délai faut-il répondre à une demande d'accès aux données personnelles ?", "expected_doc": "loi-demo-protection-donnees", "expected_article": "Article 5"},
-  {"question": "Sous combien de temps notifier une violation de données à l'autorité ?", "expected_doc": "loi-demo-protection-donnees", "expected_article": "Article 8"},
-  {"question": "À partir de quand un délégué à la protection des données est-il obligatoire ?", "expected_doc": "loi-demo-protection-donnees", "expected_article": "Article 7"},
-  {"question": "Quelle est la durée maximale de conservation des données après la fin du contrat ?", "expected_doc": "loi-demo-protection-donnees", "expected_article": "Article 9"},
-  {"question": "Peut-on transférer des données personnelles à l'étranger ?", "expected_doc": "loi-demo-protection-donnees", "expected_article": "Article 10"},
-  {"question": "Quelle longueur minimale pour les mots de passe des systèmes critiques ?", "expected_doc": "decret-demo-securite-si", "expected_article": "Article 3"},
-  {"question": "Pendant combien de temps conserver les journaux de sécurité ?", "expected_doc": "decret-demo-securite-si", "expected_article": "Article 5"},
-  {"question": "Sous quel délai déclarer un incident de cybersécurité majeur ?", "expected_doc": "decret-demo-securite-si", "expected_article": "Article 6"},
-  {"question": "À quelle fréquence faut-il tester la restauration des sauvegardes ?", "expected_doc": "decret-demo-securite-si", "expected_article": "Article 4"},
-  {"question": "Combien de jours de télétravail par semaine au maximum ?", "expected_doc": "arrete-demo-teletravail", "expected_article": "Article 3"},
-  {"question": "Quelle indemnité si le salarié utilise son équipement personnel en télétravail ?", "expected_doc": "arrete-demo-teletravail", "expected_article": "Article 4"},
-  {"question": "Le télétravailleur a-t-il un droit à la déconnexion ?", "expected_doc": "arrete-demo-teletravail", "expected_article": "Article 5"}
+  {
+    "question": "Dans quel délai faut-il répondre à une demande d'accès aux données personnelles ?",
+    "expected_doc": "loi-demo-protection-donnees",
+    "expected_article": "Article 5"
+  },
+  {
+    "question": "Sous combien de temps notifier une violation de données à l'autorité ?",
+    "expected_doc": "loi-demo-protection-donnees",
+    "expected_article": "Article 8"
+  },
+  {
+    "question": "À partir de quand un délégué à la protection des données est-il obligatoire ?",
+    "expected_doc": "loi-demo-protection-donnees",
+    "expected_article": "Article 7"
+  },
+  {
+    "question": "Quelle est la durée maximale de conservation des données après la fin du contrat ?",
+    "expected_doc": "loi-demo-protection-donnees",
+    "expected_article": "Article 9"
+  },
+  {
+    "question": "Peut-on transférer des données personnelles à l'étranger ?",
+    "expected_doc": "loi-demo-protection-donnees",
+    "expected_article": "Article 10"
+  },
+  {
+    "question": "Quelle longueur minimale pour les mots de passe des systèmes critiques ?",
+    "expected_doc": "decret-demo-securite-si",
+    "expected_article": "Article 3"
+  },
+  {
+    "question": "Pendant combien de temps conserver les journaux de sécurité ?",
+    "expected_doc": "decret-demo-securite-si",
+    "expected_article": "Article 5"
+  },
+  {
+    "question": "Sous quel délai déclarer un incident de cybersécurité majeur ?",
+    "expected_doc": "decret-demo-securite-si",
+    "expected_article": "Article 6"
+  },
+  {
+    "question": "À quelle fréquence faut-il tester la restauration des sauvegardes ?",
+    "expected_doc": "decret-demo-securite-si",
+    "expected_article": "Article 4"
+  },
+  {
+    "question": "Combien de jours de télétravail par semaine au maximum ?",
+    "expected_doc": "arrete-demo-teletravail",
+    "expected_article": "Article 3"
+  },
+  {
+    "question": "Quelle indemnité si le salarié utilise son équipement personnel en télétravail ?",
+    "expected_doc": "arrete-demo-teletravail",
+    "expected_article": "Article 4"
+  },
+  {
+    "question": "Le télétravailleur a-t-il un droit à la déconnexion ?",
+    "expected_doc": "arrete-demo-teletravail",
+    "expected_article": "Article 5"
+  },
+  {
+    "question": "Quel est le seuil au-delà duquel un marché public doit être mis en concurrence ?",
+    "expected_doc": "circulaire-demo-marches-publics",
+    "expected_article": "Article 2"
+  },
+  {
+    "question": "Quel délai minimum pour remettre une offre ?",
+    "expected_doc": "circulaire-demo-marches-publics",
+    "expected_article": "Article 3"
+  },
+  {
+    "question": "Quelle garantie de bonne exécution est exigée du titulaire du marché ?",
+    "expected_doc": "circulaire-demo-marches-publics",
+    "expected_article": "Article 4"
+  },
+  {
+    "question": "Quel est le délai de paiement des factures par l'administration ?",
+    "expected_doc": "circulaire-demo-marches-publics",
+    "expected_article": "Article 5"
+  },
+  {
+    "question": "À quelle température conserver les denrées périssables ?",
+    "expected_doc": "reglement-demo-hygiene",
+    "expected_article": "Article 2"
+  },
+  {
+    "question": "Sous quel délai déclarer un incident sanitaire grave ?",
+    "expected_doc": "reglement-demo-hygiene",
+    "expected_article": "Article 4"
+  },
+  {
+    "question": "Quelle amende pour non-respect de la chaîne du froid ?",
+    "expected_doc": "reglement-demo-hygiene",
+    "expected_article": "Article 6"
+  },
+  {
+    "question": "Quel délai pour répondre à une demande de réutilisation d'un jeu de données ?",
+    "expected_doc": "charte-demo-donnees-ouvertes",
+    "expected_article": "Article 3"
+  },
+  {
+    "question": "Combien de temps conserver les archives des jeux de données ?",
+    "expected_doc": "charte-demo-donnees-ouvertes",
+    "expected_article": "Article 4"
+  },
+  {
+    "question": "De combien de temps disposent les sites existants pour se mettre en conformité en accessibilité ?",
+    "expected_doc": "note-demo-accessibilite",
+    "expected_article": "Article 3"
+  },
+  {
+    "question": "Dans quel délai répondre à un signalement d'un défaut d'accessibilité ?",
+    "expected_doc": "note-demo-accessibilite",
+    "expected_article": "Article 4"
+  },
+  {
+    "question": "Quel est le prix d'un billet de train pour Paris ?",
+    "answerable": false
+  },
+  {
+    "question": "Quelle est la capitale de la France ?",
+    "answerable": false
+  },
+  {
+    "question": "Comment calculer l'impôt sur les sociétés ?",
+    "answerable": false
+  },
+  {
+    "question": "Quelles sont les conditions de délivrance du permis de conduire ?",
+    "answerable": false
+  },
+  {
+    "question": "Quelle est la durée du congé de maternité ?",
+    "answerable": false
+  },
+  {
+    "question": "Comment obtenir un visa pour étudier à l'étranger ?",
+    "answerable": false
+  },
+  {
+    "question": "Quelles sont les règles de construction d'un immeuble ?",
+    "answerable": false
+  },
+  {
+    "question": "Quelle est l'amende en cas de non-respect du télétravail ?",
+    "answerable": false,
+    "near_miss": true,
+    "note": "proche du corpus (télétravail, amende) mais aucun article ne prévoit cette sanction"
+  },
+  {
+    "question": "Quel est le délai de recours contre un refus d'accès aux données personnelles ?",
+    "answerable": false,
+    "near_miss": true,
+    "note": "proche du corpus (recours, données personnelles) mais le recours de 10 jours concerne les marchés publics"
+  }
 ]

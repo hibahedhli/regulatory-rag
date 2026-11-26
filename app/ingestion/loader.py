@@ -58,7 +58,10 @@ def _first_line(text: str, fallback: str) -> str:
 
 
 def _load_pdf(path: Path) -> RawDocument:
-    import fitz  # PyMuPDF
+    try:
+        import pymupdf as fitz  # nom actuel de PyMuPDF
+    except ImportError:  # anciennes versions
+        import fitz
 
     pages: list[tuple[int | None, str]] = []
     with fitz.open(path) as pdf:

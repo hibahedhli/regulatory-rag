@@ -14,8 +14,10 @@ from app.rag.models import Hit
 from app.retrieval.bm25 import BM25Retriever
 from app.retrieval.dense import DenseRetriever, clear_index
 from app.retrieval.hybrid import rrf_fuse
+from app.retrieval.text import tokenize
 
 MODES = ("hybrid", "dense", "bm25")
+ABSENT_MESSAGE = "Je n'ai pas trouvé cette information dans les textes fournis."
 
 
 class RAGPipeline:
@@ -97,8 +99,42 @@ class RAGPipeline:
 
     # ---------- recherche ----------
     def search(self, query: str, mode: str = "hybrid", top_k: int | None = None) -> list[Hit]:
+        return self._retrieve(query, mode, top_k)[0]
+
+    def search_with_relevance(self, query: str, mode: str = "hybrid", top_k: int | None = None) -> tuple[list[Hit], dict]:
+        hits, dense = self._retrieve(query, mode, top_k)
+        return hits, self.assess(query, hits, dense)
+
+    def assess(self, query: str, hits: list[Hit], dense: list[tuple[str, float]]) -> dict:
+        """Estime si les passages retrouvés répondent vraiment à la question.
+
+        Deux signaux : la similarité vectorielle du meilleur passage, et le recouvrement lexical
+        (part des mots de la question présents dans le meilleur passage). La réponse est jugée
+        absente seulement si LES DEUX sont faibles, pour éviter de refuser une question reformulée.
+        """
+        if not hits:
+            return {"dense_sim": None, "coverage": 0.0, "absent": True, "reason": "aucun passage retrouvé"}
+        q = set(tokenize(query))
+        coverage = 1.0
+        if q:
+            coverage = max(
+                len(q & set(tokenize(f"{h.chunk.title} {h.chunk.section} {h.chunk.article} {h.chunk.text}"))) / len(q)
+                for h in hits
+            )
+        dense_sim = max((sc for _, sc in dense), default=None)
+        weak_cov = coverage < self.settings.min_coverage
+        weak_sim = dense_sim is None or dense_sim < self.settings.min_similarity
+        absent = weak_cov and weak_sim
+        return {
+            "dense_sim": None if dense_sim is None else round(dense_sim, 4),
+            "coverage": round(coverage, 3),
+            "absent": absent,
+            "reason": "faible similarité et faible recouvrement lexical" if absent else "",
+        }
+
+    def _retrieve(self, query: str, mode: str, top_k: int | None) -> tuple[list[Hit], list[tuple[str, float]]]:
         if not self.is_ready():
-            return []
+            return [], []
         top_k = top_k or self.settings.top_k
         n = max(self.settings.candidates, top_k)
         dense = self.dense.search(query, n) if mode in ("hybrid", "dense") else []
@@ -125,13 +161,16 @@ class RAGPipeline:
             ranked = self._reranker.rerank(query, [h.chunk for h in hits])
             by_id = {h.chunk.chunk_id: h for h in hits}
             hits = [Hit(c, s, by_id[c.chunk_id].detail | {"reranked": True}) for c, s in ranked]
-        return hits[:top_k]
+        return hits[:top_k], dense
 
     # ---------- question / réponse ----------
     def ask(self, question: str, top_k: int | None = None, mode: str = "hybrid") -> dict:
-        hits = self.search(question, mode=mode, top_k=top_k)
-        answer = generate_answer(self.settings, question, hits)
-        cited = {int(n) for n in re.findall(r"\[(\d+)\]", answer)}
+        hits, rel = self.search_with_relevance(question, mode=mode, top_k=top_k)
+        if rel["absent"]:  # pas d'appel au LLM : on évite toute invention
+            answer, cited = ABSENT_MESSAGE, set()
+        else:
+            answer = generate_answer(self.settings, question, hits)
+            cited = {int(n) for n in re.findall(r"\[(\d+)\]", answer)}
         sources = []
         for i, h in enumerate(hits, start=1):
             c = h.chunk
@@ -149,4 +188,12 @@ class RAGPipeline:
                     "cited": i in cited,
                 }
             )
-        return {"question": question, "answer": answer, "sources": sources, "mode": mode, "llm_provider": self.settings.llm_provider}
+        return {
+            "question": question,
+            "answer": answer,
+            "sources": sources,
+            "mode": mode,
+            "llm_provider": self.settings.llm_provider,
+            "absent": rel["absent"],
+            "relevance": rel,
+        }

@@ -1,6 +1,5 @@
-"""Interface Streamlit, style « conversation » (inspirée de Claude), thème sombre, rouge #af0c0c.
 
-- Barre latérale : nouvelle conversation, documents (ajout / suppression), réglages.
+"""- Barre latérale : nouvelle conversation, documents (ajout / suppression), réglages.
 - Zone centrale : conversation, réponses avec citations et sources, saisie en bas.
 Aucun document n'est préchargé : l'utilisateur ajoute les siens.
 """
@@ -66,6 +65,8 @@ details.srcs summary:hover{color:var(--vl);}
 .sr{padding:12px 0;border-top:1px solid var(--bd);}
 .sr b{color:var(--ink);font-size:.9rem;} .sr .m{color:var(--muted);font-size:.8rem;margin-left:6px;}
 .sr p{margin:6px 0 0 0;font-size:.86rem;line-height:1.55;color:var(--soft);}
+.noans{border:1px solid rgba(245,158,11,.5);background:rgba(245,158,11,.1);border-radius:14px;padding:10px 16px;margin-bottom:12px;font-size:.92rem;}
+.noans b{color:#F59E0B;}
 
 /* ---------- barre latérale ---------- */
 .brand{font-family:var(--serif);font-size:1.4rem;color:var(--ink);font-weight:600;display:flex;align-items:center;gap:8px;margin:4px 0 14px 0;}
@@ -127,8 +128,12 @@ def user_html(text: str) -> str:
 
 def assistant_html(d: dict) -> str:
     sources = d.get("sources", [])
+    answer = d.get("answer", "")
+    no_answer = bool(d.get("no_answer")) or answer.strip().replace("’", "'").lower().startswith("je n'ai pas trouvé")
     cited = [s for s in sources if s["cited"]] or sources[:3]
-    pills = "".join(f'<span class="pill"><i>{s["n"]}</i>{esc(s["article"])} · {esc(short(s["title"]))}</span>' for s in cited)
+    pills = "" if no_answer else "".join(
+        f'<span class="pill"><i>{s["n"]}</i>{esc(s["article"])} · {esc(short(s["title"]))}</span>' for s in cited
+    )
     rows = ""
     for s in sources:
         page = f" · p. {s['page']}" if s.get("page") else ""
@@ -143,8 +148,8 @@ def assistant_html(d: dict) -> str:
             f'<div class="pills">{pills}</div>'
             f'<details class="srcs"><summary>Voir les {len(sources)} passages consultés</summary>{rows}</details>'
         )
-    return f'<div class="a-row"><div class="a-mark">✦</div><div class="a-body">{render_answer(d["answer"])}{block}</div></div>'
-
+    banner = '<div class="noans"><b>Aucune réponse dans tes documents</b></div>' if no_answer else ""
+    return f'<div class="a-row"><div class="a-mark">✦</div><div class="a-body">{banner}{render_answer(answer)}{block}</div></div>'
 
 # ---------------------------------------------------------------- état
 docs, doc_error = call_api("get", "/documents", timeout=15)

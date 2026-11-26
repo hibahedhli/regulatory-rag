@@ -43,7 +43,16 @@ class Settings:
     reranker_enabled: bool = field(default_factory=lambda: _b("RERANKER_ENABLED", False))
     reranker_model: str = field(default_factory=lambda: _s("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3"))
 
+    # Détection des questions sans réponse dans le corpus (voir README, « Réponses absentes »)
+    min_similarity: float | None = None  # similarité cosinus minimale ; défaut selon le modèle d'embedding
+    min_coverage: float = field(default_factory=lambda: float(_s("MIN_COVERAGE", "0.34")))
+
     llm_provider: str = field(default_factory=lambda: _s("LLM_PROVIDER", "none"))
     anthropic_model: str = field(default_factory=lambda: _s("ANTHROPIC_MODEL", "claude-sonnet-5-5"))
     ollama_url: str = field(default_factory=lambda: _s("OLLAMA_URL", "http://localhost:11434"))
     ollama_model: str = field(default_factory=lambda: _s("OLLAMA_MODEL", "mistral"))
+
+    def __post_init__(self) -> None:
+        if self.min_similarity is None:
+            default = "0.25" if self.embedding_backend == "hashing" else "0.78"
+            self.min_similarity = float(_s("MIN_SIMILARITY", default))

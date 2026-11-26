@@ -87,8 +87,8 @@ def chunk_document(doc: RawDocument, max_words: int = 220, overlap: int = 40) ->
             return
         text = "\n".join(lines)
         words = text.split()
-        if article == "Préambule" and len(words) < 8:
-            return
+        if article == "Préambule" and (len(words) < 8 or " ".join(words).lower() == " ".join(doc.title.split()).lower()):
+            return  # en-tête sans contenu (ou simple répétition du titre, déjà ajouté à chaque passage)
         parts = [text] if len(words) <= max_words else [" ".join(w) for w in _windows(words, max_words, overlap)]
         for part in parts:
             seq += 1
