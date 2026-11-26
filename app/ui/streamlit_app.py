@@ -23,10 +23,21 @@ st.set_page_config(page_title="Assistant réglementaire", page_icon="✦", layou
 
 CSS = """
 <style>
-:root{--v:#af0c0c;--vh:#8A0909;--vl:#EF5B5B;--bg:#252424;--side:#1F1E1E;--surf:#2F2D2D;--surf2:#2A2828;--bd:#403C3C;
-      --ink:#F2EFEF;--muted:#A89F9F;--soft:#CFC7C7;
+:root{   --v: #6B507B;
+    --vh: #594166;
+    --vl: #FDFD96;
+
+    --bg: #2B202E;
+    --side: #241B27;
+    --surf: #322638;
+    --surf2: #2B202E;
+    --bd: #514157;
+
+    --ink: #F2EDF4;
+    --muted: #B5A9BA;
+    --soft: #D8CDDF;
       --serif:'Iowan Old Style','Palatino Linotype','Book Antiqua',Georgia,serif;}
-[data-testid="stDecoration"],#MainMenu,footer{display:none !important;}
+
 header[data-testid="stHeader"]{background:transparent;}
 .stApp{background:var(--bg);color:var(--ink);}
 .block-container{max-width:800px;padding-top:2.2rem;padding-bottom:9rem;}
@@ -68,7 +79,7 @@ details.srcs summary:hover{color:var(--vl);}
 /* ---------- composants Streamlit ---------- */
 [data-testid="stBottom"]>div{background:linear-gradient(to top,var(--bg) 72%,rgba(37,36,36,0));}
 [data-testid="stChatInput"]{border:1px solid var(--bd);border-radius:26px;background:var(--surf);box-shadow:0 6px 22px rgba(0,0,0,.35);}
-[data-testid="stChatInput"]:focus-within{border-color:var(--v);box-shadow:0 6px 26px rgba(175,12,12,.35);}
+[data-testid="stChatInput"]:focus-within{border-color:var(--v);box-shadow: 0 6px 26px rgba(242,196,109,.25);}
 [data-testid="stChatInput"] textarea{font-size:1.02rem;color:var(--ink);}
 [data-testid="stChatInputSubmitButton"]{background:var(--v);color:#fff;border-radius:14px;}
 .stButton>button{background:var(--surf);color:var(--ink);border:1px solid var(--bd);border-radius:14px;font-weight:600;}
