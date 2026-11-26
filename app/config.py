@@ -48,7 +48,6 @@ class Settings:
     min_coverage: float = field(default_factory=lambda: float(_s("MIN_COVERAGE", "0.34")))
 
     llm_provider: str = field(default_factory=lambda: _s("LLM_PROVIDER", "none"))
-    anthropic_model: str = field(default_factory=lambda: _s("ANTHROPIC_MODEL", "claude-sonnet-5-5"))
     ollama_url: str = field(default_factory=lambda: _s("OLLAMA_URL", "http://localhost:11434"))
     ollama_model: str = field(default_factory=lambda: _s("OLLAMA_MODEL", "mistral"))
 

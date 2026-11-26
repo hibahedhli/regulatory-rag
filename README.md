@@ -17,7 +17,7 @@ des réponses **accompagnées des références aux documents sources** (document
                                               chunks.jsonl (BM25)   ▼
                                                               fusion RRF ─► reranker (optionnel)
                                                                     ▼
-                                                      LLM (Claude / Ollama / extractif)
+                                                      LLM (Ollama / extractif)
                                                       prompt contraint + citations [n]
                                                                     ▼
                                                       Réponse + sources (doc, article, page, extrait)
@@ -38,7 +38,7 @@ app/
   retrieval/hybrid.py    # fusion RRF
   retrieval/reranker.py  # cross-encoder (optionnel)
   generation/prompt.py   # prompt système + contexte numéroté
-  generation/llm.py      # Claude, Ollama ou mode extractif (repli automatique)
+  generation/llm.py      # Ollama ou mode extractif (repli automatique)
   rag/pipeline.py        # orchestration : ingest / search / ask
   api/main.py            # API FastAPI
   ui/streamlit_app.py    # interface
@@ -92,7 +92,6 @@ Avec Docker, `docker-compose.yml` pointe déjà vers l'Ollama de ta machine (`ho
 | `LLM_PROVIDER` | Description |
 |---|---|
 | `none` | Mode extractif : renvoie les passages pertinents sans génération (aucune clé nécessaire) |
-| `anthropic` | Claude via API (`ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`) |
 | `ollama` | Modèle local (`OLLAMA_URL`, `OLLAMA_MODEL`, ex. `mistral`) |
 
 Si le LLM est indisponible, le système retombe automatiquement sur le mode extractif.

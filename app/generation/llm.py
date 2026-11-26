@@ -1,7 +1,5 @@
-"""Génération de la réponse : Claude (API), Ollama (local) ou mode extractif sans LLM."""
+"""Génération de la réponse : Ollama (local) ou mode extractif sans LLM."""
 from __future__ import annotations
-
-import os
 
 from app.config import Settings
 from app.generation.prompt import SYSTEM_PROMPT, build_user_prompt
@@ -20,22 +18,11 @@ def _extractive(hits: list[Hit], note: str = "") -> str:
     return "\n".join(lines)
 
 
-def _anthropic(settings: Settings, system: str, user: str) -> str:
-    import anthropic
-
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-    msg = client.messages.create(
-        model=settings.anthropic_model,
-        max_tokens=1000,
-        system=system,
-        messages=[{"role": "user", "content": user}],
-    )
-    return "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
-
-
 def _ollama(settings: Settings, system: str, user: str) -> str:
     import requests
 
+    print(f"[OLLAMA] Prompt length: {len(user)} characters")
+    print(f"[OLLAMA] Model: {settings.ollama_model}")
     r = requests.post(
         f"{settings.ollama_url}/api/chat",
         json={
@@ -47,7 +34,12 @@ def _ollama(settings: Settings, system: str, user: str) -> str:
         },
         timeout=600,  # un modèle local sans GPU peut être lent à la 1re réponse
     )
-    r.raise_for_status()
+    if not r.ok:
+        print("[OLLAMA] HTTP STATUS:", r.status_code)
+        print("[OLLAMA] ERROR RESPONSE:", r.text)
+        raise RuntimeError(
+            f"Ollama HTTP {r.status_code}: {r.text[:1000]}"
+        )
     return r.json()["message"]["content"].strip()
 
 
@@ -59,12 +51,10 @@ def generate_answer(settings: Settings, question: str, hits: list[Hit]) -> str:
         return _extractive(hits)
     user = build_user_prompt(question, hits)
     try:
-        if provider == "anthropic":
-            return _anthropic(settings, SYSTEM_PROMPT, user)
         if provider == "ollama":
             return _ollama(settings, SYSTEM_PROMPT, user)
         raise ValueError(f"LLM_PROVIDER inconnu : {provider}")
-    except Exception as exc:  # repli propre si l'API/le modèle est indisponible
+    except Exception as exc:  # repli propre si le modèle est indisponible
         hint = ""
         if provider == "ollama":
             hint = f" Vérifie qu'Ollama est lancé et que le modèle '{settings.ollama_model}' est installé (`ollama list`)."
