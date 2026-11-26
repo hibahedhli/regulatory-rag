@@ -12,7 +12,7 @@ des réponses **accompagnées des références aux documents sources** (document
             INDEXATION (hors ligne)                              REQUÊTE (en ligne)
  data/raw ─► loader ─► chunker par ARTICLE ─► embeddings         Question
  (PDF/TXT/    (texte + n° page)  (titre, chapitre,    │             │
-  MD/HTML)                        article, page)      ▼             ├─► recherche vectorielle (ChromaDB)
+  DOCX/MD/HTML)                        article, page)      ▼             ├─► recherche vectorielle (ChromaDB)
                                               ChromaDB (vecteurs)   ├─► BM25 (mots-clés, n° d'articles)
                                               chunks.jsonl (BM25)   ▼
                                                               fusion RRF ─► reranker (optionnel)
@@ -47,7 +47,7 @@ app/
 scripts/                 # ingest.py, ask.py (CLI)
 tests/                   # chunker, pipeline, API
 data/raw/                # documents de l'utilisateur (vide au départ)
-data/eval/               # ton jeu de questions d'évaluation (à créer)
+data/eval/               # jeu de questions, tests_manuels.md, error_report.md (analyses)
 demo/                    # 7 textes fictifs (txt, md, html, docx, pdf) + 32 questions de démo (optionnel)
 .streamlit/config.toml   # thème violet / blanc
 ```
@@ -158,6 +158,13 @@ Types de cas : bonne réponse non retrouvée, bon passage mal classé (résultat
 réponse acceptée à tort. S'il y a moins de 5 erreurs, il complète avec les succès les plus fragiles (`--min-cases`).
 Pour chaque cas, explique la cause (vocabulaire différent, articles voisins, textes qui se ressemblent, découpage…)
 et propose une amélioration.
+
+### Résultats rendus
+
+- `data/eval/tests_manuels.md` : 22 questions testées à la main dans l'interface (7 sans réponse, 8 avec réponse, 7 pièges), avec le résultat de chacune (19 réussies, 3 échecs).
+- `data/eval/error_report.md` : rapport de l'évaluation automatique (32 questions, mode `hybrid`, k = 5), complété avec les analyses : 11 cas, dont 7 erreurs réelles, 1 limite et 3 succès fragiles.
+
+Attention : `python -m app.evaluation.error_report` réécrit `error_report.md` et efface les analyses. Sauvegarde le fichier avant de relancer la commande.
 
 ## Construire ton corpus
 
